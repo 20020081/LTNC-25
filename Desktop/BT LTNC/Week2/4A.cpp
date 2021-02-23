@@ -1,6 +1,49 @@
 #include<iostream>
 using namespace std;
 
+void resultout(int d, int m, int y);
+bool Leapyear(int y);
+int daysinyear(int y);
+int daysinmonth(int m, int y);
+int dayafterinyear(int d, int m, int y, int k);
+int check(int d, int m, int y, int k);
+int daystomonth(int m, int y);
+void solve1(int d, int m, int y, int k);
+void solve2(int d, int m, int y, int k);
+void solve3(int d, int m, int y, int k);
+
+int main(){
+    int d, m, y, k;
+    char c;
+    cin >> d >> c >> m >> c >> y;
+    int D = d, M = m, Y = y;
+    while(cin >> k){
+        if(k == 0) break;
+
+        if(check(d, m, y, k) == 1){
+            solve1(d, m, y, k);
+        }
+        else if(check(d, m, y, k) == 2){
+            solve2(d, m, y, k);
+        }
+        else if(check(d, m, y, k) == 3){
+            solve3(d, m, y, k);
+        }
+    }
+
+    return 0;
+}
+
+void resultout(int d, int m, int y){
+    if(d < 10) cout << 0 << d;
+    else cout << d;
+    cout << "-";
+    if(m < 10) cout << 0 << m;
+    else cout << m;
+    cout << "-";
+    cout << y << endl;
+}
+
 bool Leapyear(int y){
     if(y % 4 == 0 && y % 100 != 0)
         return true;
@@ -54,10 +97,11 @@ int daystomonth(int m, int y){
     }
     return days;
 }
-void solve1(int &d, int k){
+void solve1(int d, int m, int y, int k){
     d += k;
+    resultout(d, m, y);
 }
-void solve2(int &d, int &m, int &y, int k){
+void solve2(int d, int m, int y, int k){
     int after = dayafterinyear(d, m, y, k);
     for(int i = 1; i <= 11; i++){
         if(after <= 31){
@@ -73,67 +117,88 @@ void solve2(int &d, int &m, int &y, int k){
     }
     if(m == 1){
         d = after;
-    }else{
+    }
+    else{
         int t = 0;
         for(int i = 1; i < m; i++){
             t += daysinmonth(i, y);
         }
         d = after - t;
     }
+    resultout(d, m, y);
 }
-void solve3(int &d, int &m, int &y, int k){
+void solve3(int d, int m, int y, int k){
     int after = dayafterinyear(d, m, y, k);
     if(after > 0){
-        // chia ngày đến hết năm hiện tại
-        if(Leapyear(y))
-            after -= 366;
-        else after -= 365;
-        // chia ngày cho các năm sau
-        while(after >= 365){
-            y++;
+        // tinh nam
+        while(after >= daysinyear(y)){
             if(Leapyear(y))
                 after -= 366;
             else after -= 365;
+            y++;
         }
-        m = after/30 + 1;
-        int t = 0;
-        for(int i = 1; i < m; i++){
-            t += daysinmonth(i, y);
+        // tinh thang
+        for(int i = 1; i <= 11; i++){
+            if(after <= 31){
+                m = 1;
+                break;
+            }
+            else{
+                if(after > daystomonth(i, y) && after <= daystomonth(i+1, y)){
+                    m = i+1;
+                    break;
+                }
+            }
         }
-        d = after - t;
+        // tinh ngay
+        if(m == 1){
+            d = after;
+        }
+        else{
+            int t = 0;
+            for(int i = 1; i < m; i++){
+                t += daysinmonth(i, y);
+            }
+            d = after - t;
+
+        }
     }
     else{ // lui nam
+        // after < 0
+        y--;
+        after *= -1;
+        while(after >= daysinyear(y)){
+            if(Leapyear(y)) y -= 366;
+            else y-= 365;
+            y--;
+        }
+        after = daysinyear(y) - after;
+        // tinh thang
+        for(int i = 1; i <= 11; i++){
+            if(after <= 31){
+                m = 1;
+                break;
+            }
+            else{
+                if(after > daystomonth(i, y) && after <= daystomonth(i+1, y)){
+                    m = i+1;
+                    break;
+                }
+            }
+        }
+        // tinh ngay
+        if(m == 1){
+            d = after;
+        }
+        else{
+            int t = 0;
+            for(int i = 1; i < m; i++){
+                t += daysinmonth(i, y);
+            }
+            d = after - t;
 
+        }
     }
+    resultout(d, m, y);
 }
-void resultout(int d, int m, int y){
-    if(d < 10) cout << 0 << d;
-    else cout << d;
-    cout << "-";
-    if(m < 10) cout << 0 << m;
-    else cout << m;
-    cout << "-";
-    cout << y << endl;
-}
-int main(){
-    int d, m, y, k;
-    char c;
-    cin >> d >> c >> m >> c >> y;
 
-    while(cin >> k){
-        if(k == 0) break;
-
-        if(check(d, m, y, k) == 1){
-            solve1(d, k);
-        }
-        else if(check(d, m, y, k) == 2){
-            solve2(d, m, y, k);
-        }
-        else if(check(d, m, y, k) == 3){
-            solve3(d, m, y, k);
-        }
-        resultout(d, m, y);
-    }
-
-    return 0;
-}

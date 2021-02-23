@@ -16,7 +16,6 @@ int main(){
     int d, m, y, k;
     char c;
     cin >> d >> c >> m >> c >> y;
-    int D = d, M = m, Y = y;
     while(cin >> k){
         if(k == 0) break;
 
@@ -82,7 +81,8 @@ int dayafterinyear(int d, int m, int y, int k){
     }
     tongsongay += d;
     return tongsongay + k;
-}
+} 
+
 int check(int d, int m, int y, int k){
     if(d + k >= 1 && d + k <= daysinmonth(m, y))
         return 1;
@@ -90,6 +90,7 @@ int check(int d, int m, int y, int k){
         return 2;
     else return 3;
 }
+
 int daystomonth(int m, int y){
     int days = 0;
     for(int i = 1; i <= m; i++){
@@ -97,10 +98,12 @@ int daystomonth(int m, int y){
     }
     return days;
 }
+
 void solve1(int d, int m, int y, int k){
     d += k;
     resultout(d, m, y);
 }
+
 void solve2(int d, int m, int y, int k){
     int after = dayafterinyear(d, m, y, k);
     for(int i = 1; i <= 11; i++){
@@ -127,6 +130,7 @@ void solve2(int d, int m, int y, int k){
     }
     resultout(d, m, y);
 }
+
 void solve3(int d, int m, int y, int k){
     int after = dayafterinyear(d, m, y, k);
     if(after > 0){

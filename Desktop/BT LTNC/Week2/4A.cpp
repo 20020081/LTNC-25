@@ -1,13 +1,13 @@
 #include<iostream>
 using namespace std;
 
-void resultout(int d, int m, int y);
-bool Leapyear(int y);
-int daysinyear(int y);
-int daysinmonth(int m, int y);
-int dayafterinyear(int d, int m, int y, int k);
-int check(int d, int m, int y, int k);
-int daystomonth(int m, int y);
+void print_result(int d, int m, int y);
+bool check_LeapYear(int y);
+int cal_days_in_year(int y);
+int cal_days_in_month(int m, int y);
+int convert_Dates_to_day_inYear(int d, int m, int y, int k);
+int check_to_solve(int d, int m, int y, int k);
+int sum_day_to_month(int m, int y);
 void solve1(int d, int m, int y, int k);
 void solve2(int d, int m, int y, int k);
 void solve3(int d, int m, int y, int k);
@@ -16,16 +16,18 @@ int main(){
     int d, m, y, k;
     char c;
     cin >> d >> c >> m >> c >> y;
+    int D = d, M = m, Y = y;
+
     while(cin >> k){
         if(k == 0) break;
 
-        if(check(d, m, y, k) == 1){
+        if(check_to_solve(d, m, y, k) == 1){
             solve1(d, m, y, k);
         }
-        else if(check(d, m, y, k) == 2){
+        else if(check_to_solve(d, m, y, k) == 2){
             solve2(d, m, y, k);
         }
-        else if(check(d, m, y, k) == 3){
+        else if(check_to_solve(d, m, y, k) == 3){
             solve3(d, m, y, k);
         }
     }
@@ -33,17 +35,19 @@ int main(){
     return 0;
 }
 
-void resultout(int d, int m, int y){
+void print_result(int d, int m, int y){
     if(d < 10) cout << 0 << d;
     else cout << d;
     cout << "-";
+
     if(m < 10) cout << 0 << m;
     else cout << m;
     cout << "-";
+
     cout << y << endl;
 }
 
-bool Leapyear(int y){
+bool check_LeapYear(int y){
     if(y % 4 == 0 && y % 100 != 0)
         return true;
     else if(y % 400 == 0)
@@ -51,16 +55,16 @@ bool Leapyear(int y){
     return false;
 }
 
-int daysinyear(int y){
-    if(Leapyear(y))
+int cal_days_in_year(int y){
+    if(check_LeapYear(y))
         return 366;
     return 365;
 }
 
-int daysinmonth(int m, int y){
+int cal_days_in_month(int m, int y){
     switch(m){
         case 2:{
-            if(Leapyear(y))
+            if(check_LeapYear(y))
                 return 29;
             return 28;
         }
@@ -74,81 +78,86 @@ int daysinmonth(int m, int y){
     }
 }
 
-int dayafterinyear(int d, int m, int y, int k){
-    int tongsongay = 0;
+int convert_Dates_to_day_inYear(int d, int m, int y, int k){
+    int total_days = 0;
     for(int i = 1; i < m; i++){
-        tongsongay += daysinmonth(i, y);
+        total_days += cal_days_in_month(i, y);
     }
-    tongsongay += d;
-    return tongsongay + k;
-} 
+    total_days += d;
+    return total_days + k;
+}
 
-int check(int d, int m, int y, int k){
-    if(d + k >= 1 && d + k <= daysinmonth(m, y))
+int check_to_solve(int d, int m, int y, int k){
+    if(d + k >= 1 && d + k <= cal_days_in_month(m, y))
         return 1;
-    else if(((d + k <= 0) || (d + k > daysinmonth(m, y))) && dayafterinyear(d, m, y, k) + k > 0 && dayafterinyear(d, m, y, k) + k < daysinyear(y))
+
+    else if(((d + k <= 0) || (d + k > cal_days_in_month(m, y))) && convert_Dates_to_day_inYear(d, m, y, k) + k > 0 && convert_Dates_to_day_inYear(d, m, y, k) + k < cal_days_in_year(y))
         return 2;
+
     else return 3;
 }
 
-int daystomonth(int m, int y){
+int sum_day_to_month(int m, int y){
     int days = 0;
     for(int i = 1; i <= m; i++){
-        days += daysinmonth(i, y);
+        days += cal_days_in_month(i, y);
     }
     return days;
 }
 
 void solve1(int d, int m, int y, int k){
     d += k;
-    resultout(d, m, y);
+    print_result(d, m, y);
 }
 
 void solve2(int d, int m, int y, int k){
-    int after = dayafterinyear(d, m, y, k);
+    int total_days_inYear = convert_Dates_to_day_inYear(d, m, y, k);
+
     for(int i = 1; i <= 11; i++){
-        if(after <= 31){
+        if(total_days_inYear <= 31){
             m = 1;
             break;
         }
         else{
-            if(after > daystomonth(i, y) && after <= daystomonth(i+1, y)){
+            if(total_days_inYear > sum_day_to_month(i, y) && total_days_inYear <= sum_day_to_month(i+1, y)){
                 m = i+1;
                 break;
             }
         }
     }
     if(m == 1){
-        d = after;
+        d = total_days_inYear;
     }
     else{
         int t = 0;
-        for(int i = 1; i < m; i++){
-            t += daysinmonth(i, y);
-        }
-        d = after - t;
-    }
-    resultout(d, m, y);
-}
 
+        for(int i = 1; i < m; i++){
+            t += cal_days_in_month(i, y);
+        }
+        d = total_days_inYear - t;
+    }
+
+    print_result(d, m, y);
+}
 void solve3(int d, int m, int y, int k){
-    int after = dayafterinyear(d, m, y, k);
-    if(after > 0){
+    int total_days_inYear = convert_Dates_to_day_inYear(d, m, y, k);
+
+    if(total_days_inYear > 0){
         // tinh nam
-        while(after >= daysinyear(y)){
-            if(Leapyear(y))
-                after -= 366;
-            else after -= 365;
+        while(total_days_inYear >= cal_days_in_year(y)){
+            if(check_LeapYear(y))
+                total_days_inYear -= 366;
+            else total_days_inYear -= 365;
             y++;
         }
         // tinh thang
         for(int i = 1; i <= 11; i++){
-            if(after <= 31){
+            if(total_days_inYear <= 31){
                 m = 1;
                 break;
             }
             else{
-                if(after > daystomonth(i, y) && after <= daystomonth(i+1, y)){
+                if(total_days_inYear > sum_day_to_month(i, y) && total_days_inYear <= sum_day_to_month(i+1, y)){
                     m = i+1;
                     break;
                 }
@@ -156,35 +165,35 @@ void solve3(int d, int m, int y, int k){
         }
         // tinh ngay
         if(m == 1){
-            d = after;
+            d = total_days_inYear;
         }
         else{
             int t = 0;
             for(int i = 1; i < m; i++){
-                t += daysinmonth(i, y);
+                t += cal_days_in_month(i, y);
             }
-            d = after - t;
+            d = total_days_inYear - t;
 
         }
     }
     else{ // lui nam
-        // after < 0
+        // total_days_inYear < 0
         y--;
-        after *= -1;
-        while(after >= daysinyear(y)){
-            if(Leapyear(y)) after -= 366;
-            else after-= 365;
+        total_days_inYear *= -1;
+        while(total_days_inYear >= cal_days_in_year(y)){
+            if(check_LeapYear(y)) total_days_inYear -= 366;
+            else total_days_inYear-= 365;
             y--;
         }
-        after = daysinyear(y) - after;
+        total_days_inYear = cal_days_in_year(y) - total_days_inYear;
         // tinh thang
         for(int i = 1; i <= 11; i++){
-            if(after <= 31){
+            if(total_days_inYear <= 31){
                 m = 1;
                 break;
             }
             else{
-                if(after > daystomonth(i, y) && after <= daystomonth(i+1, y)){
+                if(total_days_inYear > sum_day_to_month(i, y) && total_days_inYear <= sum_day_to_month(i+1, y)){
                     m = i+1;
                     break;
                 }
@@ -192,17 +201,19 @@ void solve3(int d, int m, int y, int k){
         }
         // tinh ngay
         if(m == 1){
-            d = after;
+            d = total_days_inYear;
         }
         else{
             int t = 0;
+
             for(int i = 1; i < m; i++){
-                t += daysinmonth(i, y);
+                t += cal_days_in_month(i, y);
             }
-            d = after - t;
+            d = total_days_inYear - t;
 
         }
     }
-    resultout(d, m, y);
+
+    print_result(d, m, y);
 }
 

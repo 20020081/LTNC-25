@@ -172,8 +172,8 @@ void solve3(int d, int m, int y, int k){
         y--;
         after *= -1;
         while(after >= daysinyear(y)){
-            if(Leapyear(y)) y -= 366;
-            else y-= 365;
+            if(Leapyear(y)) after -= 366;
+            else after-= 365;
             y--;
         }
         after = daysinyear(y) - after;

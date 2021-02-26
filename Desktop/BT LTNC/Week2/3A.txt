@@ -1,0 +1,1 @@
+Với n <= 0 thì vòng lặp for và while ở bài 1 không chạy đúng nữa

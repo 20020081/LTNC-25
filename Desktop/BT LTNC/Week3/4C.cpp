@@ -13,7 +13,6 @@ int detect_mine(char f[][10], int i, int j){
     if(f[i-1][j] == '*') mine++;
 
     return mine;
-
 }
 
 int main(){
@@ -30,7 +29,7 @@ int main(){
         for(int j = 0; j < col; j++){
             if(f[i][j] == 42)
                 cout << "*" << " ";
-            else cout <<  detect_mine(f, i, j) << " ";
+            else cout << detect_mine(f, i, j) << " ";
         }
         cout << endl;
     }

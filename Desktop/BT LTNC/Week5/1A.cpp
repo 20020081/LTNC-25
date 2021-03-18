@@ -13,7 +13,7 @@ int main(){
         cout << (void*) &b[i] << ' ';
     }
 
-    //cac bien int chiem 4 bit vi tri
-    //cac bien char chiem 2 bit vi tri
+    //cac bien int chiem 4 byte vi tri
+    //cac bien char chiem 1 byte vi tri
     return 0;
 }

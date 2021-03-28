@@ -4,7 +4,6 @@ using namespace std;
 const int N = 1e5;
 int n, f[N] = {0}, col[N], rl[N], lr[N];
 
-
 void print_result(){
     for(int i = 1; i <= n; i++){
         for(int j = 1; j <= n; j++){
@@ -19,7 +18,6 @@ void print_result(){
 }
 
 void dequy(int i){
-
     for(int j = 1; j <= n; j++){
         if(col[j] == 0 && rl[i+j] == 0 && lr[i-j] == 0){
             f[i] = j;

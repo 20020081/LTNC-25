@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1619177211 source:g:\code\ltnc_hw\week11\fraction-demo\fraction-demo.cpp
+	<iostream>
+	"fraction.h"
+
+1619178054 g:\code\ltnc_hw\week11\fraction-demo\fraction.h
+

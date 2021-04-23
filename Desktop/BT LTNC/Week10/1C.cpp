@@ -4,8 +4,8 @@ using namespace std;
 
 struct String{
     int len;
-    char* str;
-
+    char* str = NULL;
+    char* temp = NULL;
     String(const char* _str){
         int len = strlen(_str);
         str = new char [len];
@@ -15,6 +15,7 @@ struct String{
 
     ~String(){
         delete [] str;
+        delete [] temp;
     }
 
     void print(){
@@ -23,11 +24,12 @@ struct String{
 
     void append(const char* s){
         int n = strlen(s);
-        char* temp = new char [n];
+        temp = new char [n];
 
         strcat(temp, str);
         strcat(temp, s);
         str = temp;
+
     }
 };
 
